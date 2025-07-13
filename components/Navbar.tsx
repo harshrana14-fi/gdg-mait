@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-
+import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
 
@@ -16,7 +16,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 text-blue-700 font-bold text-xl">
-          img
+          <Image src="/images/gdglogo1.png" alt="desc" width={400} height={300} />
           <span>GDG MAIT</span>
         </Link>
 
