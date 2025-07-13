@@ -16,7 +16,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 text-blue-700 font-bold text-xl">
-          <Image src="/images/gdglogo1.png" alt="desc" width={400} height={300} />
+          <Image src="/images/gdglogo1.png" alt="desc" width={60} height={60} />
           <span>GDG MAIT</span>
         </Link>
 
