@@ -1,23 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import {
-  Calendar,
-  Users,
-  Trophy,
-  ArrowRight,
-  Star,
-  BookOpen,
-  Target,
-  Globe,
-  Moon,
-  Sun,
-  ChevronDown,
-  Sparkles,
-  Zap,
-  Heart,
-  Award
-} from 'lucide-react';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
+import Link from 'next/link';
+import {Calendar,Users,Trophy,ArrowRight,Star,BookOpen,Target,Globe,Moon,Sun,ChevronDown,Sparkles,Zap,Heart,Award} from 'lucide-react';
 
 export default function HomePage() {
   const [isVisible, setIsVisible] = useState(false);
@@ -111,8 +98,9 @@ export default function HomePage() {
 
   return (
     <div className={`min-h-screen transition-all duration-500 ${themeClasses.bg}`}>
+      <Navbar />
       
-      {/* Theme Toggle */}
+       {/* Theme Toggle */}
       <div className="fixed top-6 right-6 z-50">
         <button
           onClick={toggleDarkMode}
@@ -123,6 +111,7 @@ export default function HomePage() {
           {darkMode ? <Sun size={20} /> : <Moon size={20} />}
         </button>
       </div>
+     
 
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -150,6 +139,7 @@ export default function HomePage() {
               }}
             />
           ))}
+          
           <div className="absolute -top-40 -right-40 w-96 h-96 bg-white opacity-5 rounded-full animate-pulse"></div>
           <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-white opacity-5 rounded-full animate-pulse delay-1000"></div>
         </div>
@@ -181,10 +171,12 @@ export default function HomePage() {
                 <span>Join as Student</span>
                 <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
               </button>
+              <Link href="/auth/society/register" className="group">
               <button className="group bg-transparent border-2 border-white text-white px-8 py-4 rounded-2xl font-semibold hover:bg-white hover:text-teal-600 transition-all duration-300 flex items-center justify-center gap-2 hover:shadow-2xl transform hover:-translate-y-2">
                 <Globe size={20} className="group-hover:rotate-12 transition-transform" />
-                <span>Register Society</span>
+                <span>Register your Society</span>
               </button>
+              </Link>
             </div>
 
             {/* Features Preview */}
@@ -357,6 +349,7 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+      <Footer />
     </div>
   );
 }
