@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
-import Image from 'next/image';
+
 
 export default function Navbar() {
   const pathname = usePathname();
