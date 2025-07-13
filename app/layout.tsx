@@ -1,24 +1,23 @@
-// app/layout.tsx
+import './globals.css';
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import Navbar from '@/components/Navbar';
 
-import "./globals.css";
-import { Toaster } from "sonner";
-import type { Metadata } from "next";
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: "GDG MAIT",
-  description: "Official website of GDG MAIT - Maharaja Agrasen Institute of Technology",
+  title: 'GDG MAIT – Developers Platform',
+  description: 'Explore, host, and join tech events at MAIT',
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className="bg-white text-gray-800">
-        <Toaster position="top-center" />
-        {children}
+      <body className={inter.className}>
+        <Navbar />
+        <main className="min-h-screen bg-gradient-to-br from-white via-blue-50 to-purple-50">
+          {children}
+        </main>
       </body>
     </html>
   );

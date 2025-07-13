@@ -1,33 +1,17 @@
-import Image from "next/image";
-
 export default function HeroSection() {
   return (
-    <section
-      id="home"
-      className="w-full min-h-[90vh] bg-gradient-to-br from-[#F9FAFB] to-[#e9f1ff] flex flex-col md:flex-row items-center justify-between px-8 md:px-24 py-20"
-    >
-      <div className="max-w-xl">
-        <h1 className="text-4xl md:text-5xl font-bold leading-tight text-gray-900">
-          Welcome to <span className="text-blue-600">GDG MAIT</span>
-        </h1>
-        <p className="mt-4 text-gray-600 text-lg">
-          Empowering students through workshops, tech events, study jams and real-world learning.
-        </p>
-        <a
-          href="#events"
-          className="inline-block mt-6 bg-blue-600 text-white px-6 py-3 rounded-full font-medium hover:bg-blue-700 transition"
-        >
-          View Events
+    <section className="bg-gradient-to-br from-blue-600 to-indigo-700 text-white py-32 px-6 text-center">
+      <h1 className="text-5xl font-bold mb-4">Welcome to GDG Platform</h1>
+      <p className="text-xl max-w-2xl mx-auto">
+        A platform where all MAIT societies manage events and students participate easily.
+      </p>
+      <div className="mt-8 flex justify-center gap-6">
+        <a href="/auth/choose-role" className="bg-white text-blue-700 px-6 py-3 rounded font-semibold hover:bg-gray-100 transition">
+          Get Started
         </a>
-      </div>
-
-      <div className="mt-10 md:mt-0 relative w-[300px] h-[300px] md:w-[400px] md:h-[400px]">
-        <Image
-          src="/images/gdg2024.jpg"
-          alt="GDG Hero"
-          fill
-          className="object-contain rounded-xl shadow-xl"
-        />
+        <a href="#features" className="border border-white px-6 py-3 rounded font-semibold hover:bg-white hover:text-blue-700 transition">
+          Explore Features
+        </a>
       </div>
     </section>
   );

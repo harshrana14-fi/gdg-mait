@@ -1,61 +1,77 @@
 'use client';
 
-import { useState } from "react";
-import { Menu, X } from "lucide-react";
-import Image from "next/image";
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
-const links = [
-  { label: "Home", to: "#home" },
-  { label: "About", to: "#about" },
-  { label: "Events", to: "#events" },
-  { label: "Certificates", to: "#certificate" },
-  { label: "Team", to: "#team" },
-  { label: "Contact", to: "#contact" },
-];
+import { cn } from '@/lib/utils';
+import { useState } from 'react';
+import Image from 'next/image';
 
 export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   return (
-    <nav className="sticky top-0 z-50 bg-white shadow-md px-6 py-4 flex justify-between items-center">
-      <div className="flex items-center gap-2">
-        <Image src="/images/gdglogo1.png" alt="GDG MAIT" width={40} height={40} />
-        <span className="text-xl font-bold text-gray-800">GDG MAIT</span>
-      </div>
+    <header className="bg-white shadow sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        {/* Logo */}
+        <Link href="/" className="flex items-center gap-2 text-blue-700 font-bold text-xl">
+          img
+          <span>GDG MAIT</span>
+        </Link>
 
-      <div className="hidden md:flex gap-6">
-        {links.map(({ label, to }) => (
-          <a
-            key={label}
-            href={to}
-            className="text-gray-700 hover:text-blue-600 transition"
+        {/* Links */}
+        <nav className="flex items-center gap-6">
+          <Link
+            href="/"
+            className={cn(
+              'relative text-gray-700 font-medium hover:text-purple-700 transition hover-underline',
+              pathname === '/' && 'text-purple-700'
+            )}
           >
-            {label}
-          </a>
-        ))}
-      </div>
+            Home
+          </Link>
 
-      {/* Mobile Menu */}
-      <div className="md:hidden">
-        <button onClick={() => setIsOpen(!isOpen)}>
-          {isOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
-      </div>
+          <Link
+            href="/events"
+            className={cn(
+              'relative text-gray-700 font-medium hover:text-purple-700 transition hover-underline',
+              pathname.startsWith('/events') && 'text-purple-700'
+            )}
+          >
+            Events
+          </Link>
 
-      {isOpen && (
-        <div className="absolute top-16 left-0 w-full bg-white shadow-md flex flex-col items-center md:hidden">
-          {links.map(({ label, to }) => (
-            <a
-              key={label}
-              href={to}
-              className="py-3 text-gray-700 hover:text-blue-600 w-full text-center"
-              onClick={() => setIsOpen(false)}
+          {/* Dropdown */}
+          <div className="relative">
+            <button
+              onClick={() => setDropdownOpen((prev) => !prev)}
+              className="relative text-gray-700 font-medium hover:text-purple-700 transition hover-underline"
             >
-              {label}
-            </a>
-          ))}
-        </div>
-      )}
-    </nav>
+              Societies
+            </button>
+
+            {dropdownOpen && (
+              <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg border rounded-xl z-50 overflow-hidden">
+                <Link
+                  href="/auth/society/login"
+                  className="block px-5 py-3 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-700 transition"
+                  onClick={() => setDropdownOpen(false)}
+                >
+                  Login
+                </Link>
+                <Link
+                  href="/auth/society/register"
+                  className="block px-5 py-3 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-700 transition"
+                  onClick={() => setDropdownOpen(false)}
+                >
+                  Register
+                </Link>
+              </div>
+            )}
+          </div>
+        </nav>
+      </div>
+    </header>
   );
 }
