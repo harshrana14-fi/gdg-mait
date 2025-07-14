@@ -1,24 +1,16 @@
 import { NextRequest } from 'next/server';
 
-// Define the expected context type
-type Context = {
-  params: {
-    id: string;
-  };
-};
-
-// PUT handler for updating an event by ID
-export async function PUT(req: NextRequest, context: Context) {
-  const { id } = context.params;
+export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+  const { id } = params;
 
   try {
     const body = await req.json();
 
-    // Example update logic (replace with your actual DB or logic)
-    // For now, just echoing back what was received
+    // Do your event update logic here (e.g., DB call)
+    // For now, we're just returning the received data
     return new Response(
       JSON.stringify({
-        message: `Successfully updated event with ID ${id}`,
+        message: `Successfully updated event with ID: ${id}`,
         data: body,
       }),
       {
@@ -31,7 +23,7 @@ export async function PUT(req: NextRequest, context: Context) {
   } catch (error) {
     return new Response(
       JSON.stringify({
-        message: 'Failed to update event',
+        message: 'Failed to update event.',
         error: error instanceof Error ? error.message : 'Unknown error',
       }),
       {
