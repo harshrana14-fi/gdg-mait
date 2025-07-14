@@ -34,7 +34,7 @@ export default function SocietyLoginPage() {
         localStorage.removeItem('user'); // remove bad data
       }
     }
-  }, []);
+  }, [router]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });

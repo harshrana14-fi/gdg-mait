@@ -1,31 +1,57 @@
+import { NextRequest, NextResponse } from 'next/server';
 import { connectDB } from '@/lib/mongoose';
 import { Event } from '@/models/Event';
-import { NextRequest, NextResponse } from 'next/server';
 
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
-  await connectDB();
-  const { title, description, date, venue, imageUrl } = await req.json();
+/**
+ * Update an event by ID
+ */
+export async function PUT(
+  req: NextRequest,
+  context: { params: { id: string } }
+) {
+  try {
+    await connectDB();
 
-  const updated = await Event.findByIdAndUpdate(
-    params.id,
-    { title, description, date, venue, imageUrl },
-    { new: true }
-  );
+    const { id } = context.params;
+    const { title, description, date, venue, imageUrl } = await req.json();
 
-  if (!updated) {
-    return NextResponse.json({ error: 'Event not found' }, { status: 404 });
+    const updated = await Event.findByIdAndUpdate(
+      id,
+      { title, description, date, venue, imageUrl },
+      { new: true }
+    );
+
+    if (!updated) {
+      return NextResponse.json({ error: 'Event not found' }, { status: 404 });
+    }
+
+    return NextResponse.json({ event: updated });
+  } catch (error) {
+    console.error('[PUT /api/society/events/:id]', error);
+    return NextResponse.json({ error: 'Failed to update event' }, { status: 500 });
   }
-
-  return NextResponse.json({ event: updated });
 }
 
-export async function DELETE(_: NextRequest, { params }: { params: { id: string } }) {
-  await connectDB();
-  const deleted = await Event.findByIdAndDelete(params.id);
+/**
+ * Delete an event by ID
+ */
+export async function DELETE(
+  req: NextRequest,
+  context: { params: { id: string } }
+) {
+  try {
+    await connectDB();
 
-  if (!deleted) {
-    return NextResponse.json({ error: 'Event not found' }, { status: 404 });
+    const { id } = context.params;
+    const deleted = await Event.findByIdAndDelete(id);
+
+    if (!deleted) {
+      return NextResponse.json({ error: 'Event not found' }, { status: 404 });
+    }
+
+    return NextResponse.json({ message: 'Deleted successfully' });
+  } catch (error) {
+    console.error('[DELETE /api/society/events/:id]', error);
+    return NextResponse.json({ error: 'Failed to delete event' }, { status: 500 });
   }
-
-  return NextResponse.json({ message: 'Deleted successfully' });
 }
