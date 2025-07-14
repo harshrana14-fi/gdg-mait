@@ -1,28 +1,35 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { db, storage } from '@/lib/firebase';
-import { collection, addDoc, Timestamp } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { FaImage, FaCalendarAlt, FaClock, FaMapMarkerAlt } from 'react-icons/fa';
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import { db, storage } from "@/lib/firebase";
+import { collection, addDoc, Timestamp } from "firebase/firestore";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import {
+  FaImage,
+  FaCalendarAlt,
+  FaClock,
+  FaMapMarkerAlt,
+} from "react-icons/fa";
 
 export default function UploadEventPage() {
   const router = useRouter();
 
   const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    date: '',
-    time: '',
-    venue: '',
+    title: "",
+    description: "",
+    date: "",
+    time: "",
+    venue: "",
   });
 
   const [bannerFile, setBannerFile] = useState<File | null>(null);
   const [bannerPreview, setBannerPreview] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -35,28 +42,35 @@ export default function UploadEventPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!bannerFile) return alert('Please upload a banner image.');
+
+    if (!bannerFile) return alert("Please upload a banner image.");
 
     setUploading(true);
 
     try {
-      // 1. Upload banner to Firebase Storage
-      const bannerRef = ref(storage, `banners/${Date.now()}_${bannerFile.name}`);
+      // Upload banner to Firebase Storage
+      const bannerRef = ref(
+        storage,
+        `banners/${Date.now()}_${bannerFile.name}`
+      );
       await uploadBytes(bannerRef, bannerFile);
       const bannerURL = await getDownloadURL(bannerRef);
 
-      // 2. Store event data in Firestore
-      await addDoc(collection(db, 'events'), {
+      // Add event to Firestore
+      await addDoc(collection(db, "events"), {
         ...formData,
         banner: bannerURL,
         createdAt: Timestamp.now(),
+        participants: 0,
       });
 
-      alert('✅ Event uploaded successfully!');
-      router.push('/dashboard/society');
+      alert("✅ Event uploaded successfully!");
+      setTimeout(() => {
+        router.push("/dashboard/society");
+      }, 100);
     } catch (err) {
-      console.error('Error uploading event:', err);
-      alert('❌ Upload failed. Please try again.');
+      console.error("Error uploading event:", err);
+      alert("❌ Upload failed. Please try again.");
     } finally {
       setUploading(false);
     }
@@ -65,7 +79,9 @@ export default function UploadEventPage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-white to-purple-50 px-4 py-10">
       <div className="max-w-3xl mx-auto bg-white shadow-xl p-10 rounded-3xl border border-purple-100">
-        <h2 className="text-3xl font-bold text-purple-800 mb-6">Upload New Event</h2>
+        <h2 className="text-3xl font-bold text-purple-800 mb-6">
+          Upload New Event
+        </h2>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Title */}
@@ -84,7 +100,9 @@ export default function UploadEventPage() {
 
           {/* Description */}
           <div>
-            <label className="block font-semibold mb-1">Event Description</label>
+            <label className="block font-semibold mb-1">
+              Event Description
+            </label>
             <textarea
               name="description"
               value={formData.description}
@@ -170,7 +188,7 @@ export default function UploadEventPage() {
             disabled={uploading}
             className="bg-purple-700 hover:bg-purple-800 text-white px-6 py-3 rounded-xl text-lg font-semibold w-full disabled:opacity-50"
           >
-            {uploading ? 'Uploading...' : 'Submit Event'}
+            {uploading ? "Uploading..." : "Submit Event"}
           </button>
         </form>
       </div>

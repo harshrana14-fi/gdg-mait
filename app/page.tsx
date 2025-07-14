@@ -166,12 +166,14 @@ export default function HomePage() {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+              <Link href="/student/login" className="group">
               <button className="group bg-white text-teal-600 px-8 py-4 rounded-2xl font-semibold hover:bg-opacity-90 transition-all duration-300 flex items-center justify-center gap-2 shadow-2xl hover:shadow-3xl transform hover:-translate-y-2 hover:scale-105">
                 <Users size={20} className="group-hover:animate-bounce" />
                 <span>Join as Student</span>
                 <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
               </button>
-              <Link href="/auth/society/register" className="group">
+              </Link>
+              <Link href="/society/login" className="group">
               <button className="group bg-transparent border-2 border-white text-white px-8 py-4 rounded-2xl font-semibold hover:bg-white hover:text-teal-600 transition-all duration-300 flex items-center justify-center gap-2 hover:shadow-2xl transform hover:-translate-y-2">
                 <Globe size={20} className="group-hover:rotate-12 transition-transform" />
                 <span>Register your Society</span>
