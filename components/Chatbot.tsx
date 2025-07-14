@@ -44,23 +44,39 @@ const Chatbot: React.FC<ChatbotProps> = ({ className = '' }) => {
     }
   }, [isOpen, isMinimized]);
 
-  // Fetch articles from your MongoDB collection via API route
+  // REPLACE THE OLD fetchArticles FUNCTION WITH THIS FIXED VERSION
   const fetchArticles = async (): Promise<string> => {
-    try {
-      const res = await fetch('/api/gdg/articles');
-      const articles = await res.json();
-
-      if (!articles || articles.length === 0) return 'No GDG articles available.';
-
-      return articles
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .map((a: any) => `- ${a.title}: ${a.meta?.description || ''}`)
-        .join('\n');
-    } catch (err) {
-      console.error('Failed to fetch articles:', err);
-      return 'Unable to load articles.';
+  try {
+    const res = await fetch('/api/gdg/articles');
+    
+    if (!res.ok) {
+      console.error('Articles API returned:', res.status);
+      return 'Unable to load articles at this time.';
     }
-  };
+    
+    const data = await res.json();
+    console.log('Articles API response:', data); // Debug log
+    
+    // Handle different response structures
+    const articles = Array.isArray(data) ? data : (data.articles || data.data || []);
+    
+    if (!Array.isArray(articles) || articles.length === 0) {
+      return 'No GDG articles available at the moment.';
+    }
+
+    return articles
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .map((article: any) => {
+        const title = article.title || 'Untitled';
+        const description = article.meta?.description || article.description || '';
+        return `- ${title}: ${description}`;
+      })
+      .join('\n');
+  } catch (err) {
+    console.error('Failed to fetch articles:', err);
+    return 'Unable to load articles. Please try again later.';
+  }
+};
 
   // Simulate typing animation
   const simulateTyping = (text: string): Promise<void> => {
@@ -129,30 +145,11 @@ Guidelines:
 User's question: "${userMessage.text}"
 `;
 
-      const response = await axios.post(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${process.env.NEXT_PUBLIC_GEMINI_API_KEY}`,
-        {
-          contents: [
-            {
-              role: 'user',
-              parts: [{ text: prompt }],
-            },
-          ],
-          generationConfig: {
-            temperature: 0.7,
-            topK: 1,
-            topP: 1,
-            maxOutputTokens: 1024,
-          },
-        },
-        {
-          headers: { 'Content-Type': 'application/json' },
-        }
-      );
+      const response = await axios.post('/api/chat', {
+        message: prompt,
+      });
 
-      const reply =
-        response.data?.candidates?.[0]?.content?.parts?.[0]?.text ||
-        'Sorry, I couldn\'t generate a proper response. Please try again!';
+      const reply = response.data.reply || 'Sorry, I couldnt generate any response.';
 
       // Simulate typing animation
       await simulateTyping(reply);

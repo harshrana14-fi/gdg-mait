@@ -1,27 +1,35 @@
-import clientPromise from '@/lib/mongodb';
+// app/api/gdg/articles/route.ts
 import { NextResponse } from 'next/server';
 
 export async function GET() {
   try {
-    const client = await clientPromise;
-    const db = client.db('gdgmait'); // change if your DB name is different
-    const collection = db.collection('articles');
+    // Mock data for testing - replace with your actual database query
+    const mockArticles = [
+      {
+        title: 'Getting Started with GDG MAIT',
+        meta: {
+          description: 'Learn about Google Developer Group at MAIT and how to get involved in our community.'
+        }
+      },
+      {
+        title: 'Upcoming Tech Events at MAIT',
+        meta: {
+          description: 'Join us for workshops, hackathons, and developer meetups throughout the semester.'
+        }
+      },
+      {
+        title: 'Student Life at MAIT College',
+        meta: {
+          description: 'Discover campus facilities, clubs, and academic programs at Maharaja Agrasen Institute of Technology.'
+        }
+      }
+    ];
 
-    const articles = await collection
-      .find({})
-      .sort({ updatedAt: -1 })
-      .limit(20)
-      .toArray();
-
+    return NextResponse.json(mockArticles);
+  } catch (error) {
+    console.error('Error fetching articles:', error);
     return NextResponse.json(
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      articles.map(({ _id, ...rest }) => rest) // remove _id if not needed
-    );
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (error: any) {
-    console.error('Failed to fetch articles:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch articles', details: error.message },
+      { error: 'Failed to fetch articles' },
       { status: 500 }
     );
   }

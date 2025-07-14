@@ -1,86 +1,54 @@
-import clientPromise from '@/lib/mongodb';
-import { GoogleGenerativeAI } from '@google/generative-ai';
 import { NextResponse } from 'next/server';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
 
-export async function GET() {
+export async function POST(req: Request) {
   try {
-    const prompt = `
-You are helping create structured JSON data for the GDG MAIT (Google Developer Group at Maharaja Agrasen Institute of Technology) platform.
+    const body = await req.json();
+    const userMessage = body.message;
 
-Please return the following in **valid JSON only**:
-
-{
-  "categories": [
-    {
-      "category": "Events",
-      "articles": [
-        {
-          "title": "Hack the Future 2025",
-          "slug": "hack-the-future-2025",
-          "meta": { "description": "24-hour Hackathon hosted by GDG MAIT" },
-          "media": { "images": ["https://gdgmait.vercel.app/images/hackathon.jpg"] },
-          "content": "Join us for an intense 24-hour hackathon focused on solving real-world problems using AI, Web, and Mobile development."
-        }
-      ]
-    },
-    {
-      "category": "Getting Started",
-      "articles": [
-        {
-          "title": "What is GDG MAIT?",
-          "slug": "what-is-gdg-mait",
-          "meta": { "description": "Learn about our mission and how to join." },
-          "media": { "images": ["https://gdgmait.vercel.app/images/gdg-banner.jpg"] },
-          "content": "GDG MAIT is a Google Developer Group community that hosts tech events, workshops, and hackathons to help students grow technically and professionally."
-        }
-      ]
+    if (!userMessage) {
+      return NextResponse.json({ error: 'Message is required.' }, { status: 400 });
     }
-  ]
-}
+
+    const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+
+    const prompt = `
+You are a friendly assistant for GDG MAIT (Google Developer Group at Maharaja Agrasen Institute of Technology, Delhi).
+Help users with:
+- What GDG MAIT is
+- How to join GDG MAIT
+- Upcoming tech events or hackathons
+- Info about MAIT college
+
+User's question:
+"${userMessage}"
 `;
 
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
-    const result = await model.generateContent(prompt);
+    const result = await model.generateContent({
+      contents: [
+        {
+          role: 'user',
+          parts: [{ text: prompt }],
+        },
+      ],
+      generationConfig: {
+        temperature: 0.7,
+        topK: 1,
+        topP: 1,
+        maxOutputTokens: 1024,
+      },
+    });
+
     const text = result.response.text();
 
-    console.log('RAW RESPONSE:\n', text);
-    const jsonMatch = text.match(/{[\s\S]*}/);
-    if (!jsonMatch) {
-      throw new Error('No valid JSON object found in Gemini response');
-    }
-
-    const json = JSON.parse(jsonMatch[0]);
-    console.log('PARSED JSON:\n', JSON.stringify(json, null, 2));
-
-    const client = await clientPromise;
-    const db = client.db('gdgmait');
-    const collection = db.collection('articles');
-
-    for (const category of json.categories) {
-      for (const article of category.articles) {
-        await collection.updateOne(
-          { slug: article.slug },
-          {
-            $set: {
-              ...article,
-              category: category.category,
-              updatedAt: new Date(),
-            },
-          },
-          { upsert: true }
-        );
-      }
-    }
-
-    return NextResponse.json(json);
-
+    return NextResponse.json({ reply: text });
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (err: any) {
-    console.error('Gemini failed:', err);
+  } catch (error: any) {
+    console.error('Gemini route error:', error);
     return NextResponse.json(
-      { error: 'Gemini failed', details: err.message },
+      { error: 'Gemini API error', details: error.message },
       { status: 500 }
     );
   }
