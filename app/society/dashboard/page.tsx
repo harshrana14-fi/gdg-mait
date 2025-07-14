@@ -1,8 +1,7 @@
-
-'use client';
-
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+"use client";
+import Image from "next/image";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import {
   Calendar,
   Users,
@@ -29,7 +28,7 @@ import {
   AlertCircle,
   Menu,
   X,
-} from 'lucide-react';
+} from "lucide-react";
 
 type SocietyUser = {
   name: string;
@@ -48,17 +47,17 @@ type Event = {
 export default function SocietyDashboardPage() {
   const router = useRouter();
   const [society, setSociety] = useState<SocietyUser | null>(null);
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState("overview");
   const [darkMode, setDarkMode] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [events, setEvents] = useState<Event[]>([]);
   const [editingEvent, setEditingEvent] = useState<Event | null>(null);
 
-  const [newEventTitle, setNewEventTitle] = useState('');
-  const [newEventDesc, setNewEventDesc] = useState('');
-  const [newEventDate, setNewEventDate] = useState<string>('');
-  const [newEventVenue, setNewEventVenue] = useState<string>('');
-  const [newEventImage, setNewEventImage] = useState<string>('');
+  const [newEventTitle, setNewEventTitle] = useState("");
+  const [newEventDesc, setNewEventDesc] = useState("");
+  const [newEventDate, setNewEventDate] = useState<string>("");
+  const [newEventVenue, setNewEventVenue] = useState<string>("");
+  const [newEventImage, setNewEventImage] = useState<string>("");
 
   const stats = {
     totalEvents: events.length,
@@ -70,21 +69,21 @@ export default function SocietyDashboardPage() {
   const notifications = [
     {
       id: 1,
-      message: 'Tech Summit 2025 has 150 new registrations',
-      time: '2 hours ago',
-      type: 'success',
+      message: "Tech Summit 2025 has 150 new registrations",
+      time: "2 hours ago",
+      type: "success",
     },
     {
       id: 2,
-      message: 'Coding Bootcamp feedback deadline tomorrow',
-      time: '1 day ago',
-      type: 'warning',
+      message: "Coding Bootcamp feedback deadline tomorrow",
+      time: "1 day ago",
+      type: "warning",
     },
     {
       id: 3,
-      message: 'Monthly report is ready for download',
-      time: '3 days ago',
-      type: 'info',
+      message: "Monthly report is ready for download",
+      time: "3 days ago",
+      type: "info",
     },
   ];
 
@@ -92,7 +91,7 @@ export default function SocietyDashboardPage() {
     // Mock localStorage for demo purposes
     const mockUser = {
       name: "Tech Society",
-      email: "tech@university.edu"
+      email: "tech@university.edu",
     };
     setSociety(mockUser);
     fetchEvents(mockUser.email);
@@ -103,21 +102,23 @@ export default function SocietyDashboardPage() {
     // Mock API call - replace with actual API
     const mockEvents: Event[] = [
       {
-        _id: '1',
-        title: 'Tech Summit 2025',
-        description: 'Annual technology conference',
-        date: '2025-08-15T10:00:00',
-        venue: 'Main Auditorium',
-        imageUrl: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=500&h=300&fit=crop'
+        _id: "1",
+        title: "Tech Summit 2025",
+        description: "Annual technology conference",
+        date: "2025-08-15T10:00:00",
+        venue: "Main Auditorium",
+        imageUrl:
+          "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=500&h=300&fit=crop",
       },
       {
-        _id: '2',
-        title: 'Coding Bootcamp',
-        description: 'Learn programming fundamentals',
-        date: '2025-08-20T14:00:00',
-        venue: 'Computer Lab',
-        imageUrl: 'https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?w=500&h=300&fit=crop'
-      }
+        _id: "2",
+        title: "Coding Bootcamp",
+        description: "Learn programming fundamentals",
+        date: "2025-08-20T14:00:00",
+        venue: "Computer Lab",
+        imageUrl:
+          "https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?w=500&h=300&fit=crop",
+      },
     ];
     setEvents(mockEvents);
   };
@@ -134,12 +135,12 @@ export default function SocietyDashboardPage() {
       imageUrl: newEventImage,
     };
 
-    setEvents(prev => [...prev, newEvent]);
-    setNewEventTitle('');
-    setNewEventDesc('');
-    setNewEventDate('');
-    setNewEventVenue('');
-    setNewEventImage('');
+    setEvents((prev) => [...prev, newEvent]);
+    setNewEventTitle("");
+    setNewEventDesc("");
+    setNewEventDate("");
+    setNewEventVenue("");
+    setNewEventImage("");
   };
 
   const handleEdit = (event: Event) => {
@@ -152,8 +153,8 @@ export default function SocietyDashboardPage() {
   };
 
   const handleDelete = (eventId: string) => {
-    if (confirm('Are you sure you want to delete this event?')) {
-      setEvents(prev => prev.filter(event => event._id !== eventId));
+    if (confirm("Are you sure you want to delete this event?")) {
+      setEvents((prev) => prev.filter((event) => event._id !== eventId));
     }
   };
 
@@ -169,16 +170,18 @@ export default function SocietyDashboardPage() {
       imageUrl: newEventImage,
     };
 
-    setEvents(prev => prev.map(event => 
-      event._id === editingEvent._id ? updatedEvent : event
-    ));
+    setEvents((prev) =>
+      prev.map((event) =>
+        event._id === editingEvent._id ? updatedEvent : event
+      )
+    );
 
     setEditingEvent(null);
-    setNewEventTitle('');
-    setNewEventDesc('');
-    setNewEventDate('');
-    setNewEventVenue('');
-    setNewEventImage('');
+    setNewEventTitle("");
+    setNewEventDesc("");
+    setNewEventDate("");
+    setNewEventVenue("");
+    setNewEventImage("");
   };
 
   const toggleDarkMode = () => {
@@ -186,26 +189,26 @@ export default function SocietyDashboardPage() {
   };
 
   const handleLogout = () => {
-    router.push('/society/login');
+    router.push("/society/login");
   };
 
   const themeClasses = {
-    bg: darkMode ? 'bg-gray-900' : 'bg-gray-50',
-    cardBg: darkMode ? 'bg-gray-800' : 'bg-white',
-    text: darkMode ? 'text-white' : 'text-gray-900',
-    textSecondary: darkMode ? 'text-gray-300' : 'text-gray-600',
-    border: darkMode ? 'border-gray-700' : 'border-gray-200',
-    sidebarBg: darkMode ? 'bg-gray-800' : 'bg-white',
-    hoverBg: darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-50',
+    bg: darkMode ? "bg-gray-900" : "bg-gray-50",
+    cardBg: darkMode ? "bg-gray-800" : "bg-white",
+    text: darkMode ? "text-white" : "text-gray-900",
+    textSecondary: darkMode ? "text-gray-300" : "text-gray-600",
+    border: darkMode ? "border-gray-700" : "border-gray-200",
+    sidebarBg: darkMode ? "bg-gray-800" : "bg-white",
+    hoverBg: darkMode ? "hover:bg-gray-700" : "hover:bg-gray-50",
   };
 
   const sidebarItems = [
-    { id: 'overview', label: 'Overview', icon: BarChart3 },
-    { id: 'events', label: 'Events', icon: Calendar },
-    { id: 'members', label: 'Members', icon: Users },
-    { id: 'workspace', label: 'Workspace', icon: Globe },
-    { id: 'analytics', label: 'Analytics', icon: TrendingUp },
-    { id: 'settings', label: 'Settings', icon: Settings },
+    { id: "overview", label: "Overview", icon: BarChart3 },
+    { id: "events", label: "Events", icon: Calendar },
+    { id: "members", label: "Members", icon: Users },
+    { id: "workspace", label: "Workspace", icon: Globe },
+    { id: "analytics", label: "Analytics", icon: TrendingUp },
+    { id: "settings", label: "Settings", icon: Settings },
   ];
 
   if (!society) {
@@ -220,9 +223,13 @@ export default function SocietyDashboardPage() {
   }
 
   return (
-    <div className={`min-h-screen transition-all duration-500 ${themeClasses.bg}`}>
+    <div
+      className={`min-h-screen transition-all duration-500 ${themeClasses.bg}`}
+    >
       {/* Header */}
-      <header className={`${themeClasses.cardBg} shadow-lg border-b ${themeClasses.border} sticky top-0 z-50`}>
+      <header
+        className={`${themeClasses.cardBg} shadow-lg border-b ${themeClasses.border} sticky top-0 z-50`}
+      >
         <div className="px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center">
@@ -232,13 +239,17 @@ export default function SocietyDashboardPage() {
               >
                 {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
               </button>
-              <h1 className={`text-2xl font-bold ${themeClasses.text} ml-4 lg:ml-0`}>
+              <h1
+                className={`text-2xl font-bold ${themeClasses.text} ml-4 lg:ml-0`}
+              >
                 {society.name}
               </h1>
             </div>
 
             <div className="flex items-center space-x-4">
-              <button className={`p-2 rounded-lg ${themeClasses.hoverBg} relative`}>
+              <button
+                className={`p-2 rounded-lg ${themeClasses.hoverBg} relative`}
+              >
                 <Bell size={20} className={themeClasses.text} />
                 <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                   3
@@ -287,7 +298,9 @@ export default function SocietyDashboardPage() {
             sidebarOpen ? "translate-x-0" : "-translate-x-full"
           } lg:translate-x-0 fixed lg:relative z-40 w-64 transition-transform duration-300 ease-in-out`}
         >
-          <div className={`${themeClasses.sidebarBg} h-full shadow-lg border-r ${themeClasses.border}`}>
+          <div
+            className={`${themeClasses.sidebarBg} h-full shadow-lg border-r ${themeClasses.border}`}
+          >
             <nav className="mt-8 px-4">
               <div className="space-y-2">
                 {sidebarItems.map((item) => (
@@ -373,7 +386,9 @@ export default function SocietyDashboardPage() {
                           {stat.change}
                         </span>
                       </div>
-                      <h3 className={`text-2xl font-bold ${themeClasses.text} mb-1`}>
+                      <h3
+                        className={`text-2xl font-bold ${themeClasses.text} mb-1`}
+                      >
                         {stat.value}
                       </h3>
                       <p className={`text-sm ${themeClasses.textSecondary}`}>
@@ -384,7 +399,9 @@ export default function SocietyDashboardPage() {
                 </div>
 
                 {/* Recent Activity */}
-                <div className={`${themeClasses.cardBg} rounded-2xl p-6 shadow-lg border ${themeClasses.border}`}>
+                <div
+                  className={`${themeClasses.cardBg} rounded-2xl p-6 shadow-lg border ${themeClasses.border}`}
+                >
                   <h3 className={`text-xl font-bold ${themeClasses.text} mb-4`}>
                     Recent Activity
                   </h3>
@@ -417,7 +434,9 @@ export default function SocietyDashboardPage() {
                               <p className={`${themeClasses.text} font-medium`}>
                                 {notification.message}
                               </p>
-                              <p className={`text-sm ${themeClasses.textSecondary}`}>
+                              <p
+                                className={`text-sm ${themeClasses.textSecondary}`}
+                              >
                                 {notification.time}
                               </p>
                             </div>
@@ -440,9 +459,11 @@ export default function SocietyDashboardPage() {
                 </div>
 
                 {/* Create/Edit Event Form */}
-                <div className={`${themeClasses.cardBg} p-6 rounded-xl shadow-lg border ${themeClasses.border} space-y-4`}>
+                <div
+                  className={`${themeClasses.cardBg} p-6 rounded-xl shadow-lg border ${themeClasses.border} space-y-4`}
+                >
                   <h3 className={`text-xl font-semibold ${themeClasses.text}`}>
-                    {editingEvent ? 'Edit Event' : 'Create New Event'}
+                    {editingEvent ? "Edit Event" : "Create New Event"}
                   </h3>
 
                   <input
@@ -484,30 +505,35 @@ export default function SocietyDashboardPage() {
                     className={`w-full border ${themeClasses.border} p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 ${themeClasses.cardBg} ${themeClasses.text}`}
                   />
 
-                  {newEventImage && (
-                    <img
-                      src={newEventImage}
-                      alt="Event preview"
-                      className="w-full h-40 object-cover rounded-lg"
+                  {events.map((event) => (
+                    <Image
+                      key={event._id}
+                      src={event.imageUrl}
+                      alt={event.title}
+                      width={800}
+                      height={400}
+                      className="w-full h-40 object-cover rounded"
                     />
-                  )}
+                  ))}
 
                   <div className="flex gap-3">
                     <button
-                      onClick={editingEvent ? handleUpdateEvent : handleCreateEvent}
+                      onClick={
+                        editingEvent ? handleUpdateEvent : handleCreateEvent
+                      }
                       className="bg-gradient-to-r from-teal-500 to-cyan-600 text-white px-6 py-3 rounded-lg hover:shadow-lg transition-all duration-300"
                     >
-                      {editingEvent ? 'Update Event' : 'Create Event'}
+                      {editingEvent ? "Update Event" : "Create Event"}
                     </button>
                     {editingEvent && (
                       <button
                         onClick={() => {
                           setEditingEvent(null);
-                          setNewEventTitle('');
-                          setNewEventDesc('');
-                          setNewEventDate('');
-                          setNewEventVenue('');
-                          setNewEventImage('');
+                          setNewEventTitle("");
+                          setNewEventDesc("");
+                          setNewEventDate("");
+                          setNewEventVenue("");
+                          setNewEventImage("");
                         }}
                         className="bg-gray-500 text-white px-6 py-3 rounded-lg hover:bg-gray-600 transition-colors"
                       >
@@ -524,21 +550,30 @@ export default function SocietyDashboardPage() {
                       key={event._id}
                       className={`${themeClasses.cardBg} border ${themeClasses.border} rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300`}
                     >
-                      {event.imageUrl && (
-                        <img
+                      {events.map((event) => (
+                        <Image
+                          key={event._id}
                           src={event.imageUrl}
                           alt={event.title}
-                          className="w-full h-48 object-cover"
+                          width={800}
+                          height={400}
+                          className="w-full h-40 object-cover rounded"
                         />
-                      )}
+                      ))}
                       <div className="p-4">
-                        <h3 className={`text-lg font-semibold ${themeClasses.text} mb-2`}>
+                        <h3
+                          className={`text-lg font-semibold ${themeClasses.text} mb-2`}
+                        >
                           {event.title}
                         </h3>
-                        <p className={`text-sm ${themeClasses.textSecondary} mb-3`}>
+                        <p
+                          className={`text-sm ${themeClasses.textSecondary} mb-3`}
+                        >
                           {event.description}
                         </p>
-                        <div className={`text-sm ${themeClasses.textSecondary} mb-4`}>
+                        <div
+                          className={`text-sm ${themeClasses.textSecondary} mb-4`}
+                        >
                           <p className="mb-1">📍 {event.venue}</p>
                           <p>📅 {new Date(event.date).toLocaleString()}</p>
                         </div>
@@ -576,7 +611,9 @@ export default function SocietyDashboardPage() {
                   </button>
                 </div>
 
-                <div className={`${themeClasses.cardBg} rounded-2xl p-6 shadow-lg border ${themeClasses.border}`}>
+                <div
+                  className={`${themeClasses.cardBg} rounded-2xl p-6 shadow-lg border ${themeClasses.border}`}
+                >
                   <div className="flex items-center justify-between mb-6">
                     <h3 className={`text-xl font-bold ${themeClasses.text}`}>
                       Active Members
@@ -637,22 +674,32 @@ export default function SocietyDashboardPage() {
                               {member.avatar}
                             </div>
                             <div>
-                              <h4 className={`font-semibold ${themeClasses.text}`}>
+                              <h4
+                                className={`font-semibold ${themeClasses.text}`}
+                              >
                                 {member.name}
                               </h4>
-                              <p className={`text-sm ${themeClasses.textSecondary}`}>
+                              <p
+                                className={`text-sm ${themeClasses.textSecondary}`}
+                              >
                                 {member.email}
                               </p>
                             </div>
                           </div>
                           <div className="flex items-center space-x-4">
-                            <span className={`px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800`}>
+                            <span
+                              className={`px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800`}
+                            >
                               {member.role}
                             </span>
-                            <span className={`px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800`}>
+                            <span
+                              className={`px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800`}
+                            >
                               {member.status}
                             </span>
-                            <button className={`p-2 rounded-lg ${themeClasses.hoverBg} ${themeClasses.text}`}>
+                            <button
+                              className={`p-2 rounded-lg ${themeClasses.hoverBg} ${themeClasses.text}`}
+                            >
                               <Edit size={16} />
                             </button>
                           </div>
