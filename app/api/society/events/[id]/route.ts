@@ -1,37 +1,11 @@
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
-  const { id } = params;
+// Example GET handler — safe to leave or remove if unused
+export async function GET(req: NextRequest, context: { params: { id: string } }) {
+  const { id } = context.params;
 
-  try {
-    const body = await req.json();
-
-    // Do your event update logic here (e.g., DB call)
-    // For now, we're just returning the received data
-    return new Response(
-      JSON.stringify({
-        message: `Successfully updated event with ID: ${id}`,
-        data: body,
-      }),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    );
-  } catch (error) {
-    return new Response(
-      JSON.stringify({
-        message: 'Failed to update event.',
-        error: error instanceof Error ? error.message : 'Unknown error',
-      }),
-      {
-        status: 500,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    );
-  }
+  // Example response — you can replace this with actual logic
+  return NextResponse.json({
+    message: `Fetching event with ID: ${id}`,
+  });
 }
