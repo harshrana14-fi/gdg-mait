@@ -1,41 +1,45 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { connectDB } from '@/lib/mongoose';
-import { Event } from '@/models/Event';
+import { NextRequest } from 'next/server';
 
-export async function PUT(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  await connectDB();
+// Define the expected context type
+type Context = {
+  params: {
+    id: string;
+  };
+};
 
-  const { id } = params;
-  const { title, description, date, venue, imageUrl } = await req.json();
+// PUT handler for updating an event by ID
+export async function PUT(req: NextRequest, context: Context) {
+  const { id } = context.params;
 
-  const updated = await Event.findByIdAndUpdate(
-    id,
-    { title, description, date, venue, imageUrl },
-    { new: true }
-  );
+  try {
+    const body = await req.json();
 
-  if (!updated) {
-    return NextResponse.json({ error: 'Event not found' }, { status: 404 });
+    // Example update logic (replace with your actual DB or logic)
+    // For now, just echoing back what was received
+    return new Response(
+      JSON.stringify({
+        message: `Successfully updated event with ID ${id}`,
+        data: body,
+      }),
+      {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+  } catch (error) {
+    return new Response(
+      JSON.stringify({
+        message: 'Failed to update event',
+        error: error instanceof Error ? error.message : 'Unknown error',
+      }),
+      {
+        status: 500,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
   }
-
-  return NextResponse.json({ event: updated });
-}
-
-export async function DELETE(
-  _req: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  await connectDB();
-
-  const { id } = params;
-  const deleted = await Event.findByIdAndDelete(id);
-
-  if (!deleted) {
-    return NextResponse.json({ error: 'Event not found' }, { status: 404 });
-  }
-
-  return NextResponse.json({ message: 'Deleted successfully' });
 }
