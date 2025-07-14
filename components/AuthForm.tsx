@@ -7,9 +7,12 @@ import {
   CheckCircle, AlertCircle
 } from 'lucide-react';
 
+type AuthType = 'login' | 'register';
+type AuthRole = 'student' | 'society';
+
 type Props = {
-  type: 'login' | 'register';
-  role: 'student' | 'society';
+  type: AuthType;
+  role: AuthRole;
 };
 
 export default function AuthForm({ type, role }: Props) {
@@ -19,7 +22,8 @@ export default function AuthForm({ type, role }: Props) {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async () => {
@@ -35,30 +39,55 @@ export default function AuthForm({ type, role }: Props) {
     try {
       const res = await fetch(endpoint, {
         method: 'POST',
-        body: JSON.stringify(payload),
         headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        setMsg(data.error || 'Something went wrong');
-        setIsLoading(false);
+        setMsg(data.error || 'Something went wrong.');
         return;
       }
 
-      // ✅ Set user and redirect after success (login or register)
       setMsg('Success!');
       localStorage.setItem('user', JSON.stringify(data.user));
       window.location.href = `/${role}/dashboard`;
-
-    } catch (err: unknown) {
+    } catch (err) {
       console.error('Auth error:', err);
-      setMsg('Server error');
+      setMsg('Server error. Please try again.');
     } finally {
       setIsLoading(false);
     }
   };
+
+  const renderInput = (
+    name: string,
+    type: string,
+    placeholder: string,
+    Icon: React.ElementType,
+    showToggle?: boolean
+  ) => (
+    <div className="relative">
+      <Icon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-white/60" />
+      <input
+        name={name}
+        type={showToggle ? (showPassword ? 'text' : 'password') : type}
+        placeholder={placeholder}
+        onChange={handleChange}
+        className="w-full pl-12 pr-12 py-4 bg-white/20 border border-white/30 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-300"
+      />
+      {showToggle && (
+        <button
+          type="button"
+          onClick={() => setShowPassword((prev) => !prev)}
+          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white/60 hover:text-white transition-colors"
+        >
+          {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+        </button>
+      )}
+    </div>
+  );
 
   return (
     <div className="w-full max-w-md">
@@ -76,52 +105,18 @@ export default function AuthForm({ type, role }: Props) {
         </div>
 
         <div className="space-y-4">
-          {type === 'register' && (
-            <div className="relative">
-              <Users className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-white/60" />
-              <input
-                name="name"
-                placeholder="Full Name"
-                onChange={handleChange}
-                className="w-full pl-12 pr-4 py-4 bg-white/20 border border-white/30 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-300"
-              />
-            </div>
-          )}
+          {type === 'register' && renderInput('name', 'text', 'Full Name', Users)}
 
-          <div className="relative">
-            <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-white/60" />
-            <input
-              name="email"
-              type="email"
-              placeholder="Email Address"
-              onChange={handleChange}
-              className="w-full pl-12 pr-4 py-4 bg-white/20 border border-white/30 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-300"
-            />
-          </div>
-
-          <div className="relative">
-            <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-white/60" />
-            <input
-              name="password"
-              type={showPassword ? 'text' : 'password'}
-              placeholder="Password"
-              onChange={handleChange}
-              className="w-full pl-12 pr-12 py-4 bg-white/20 border border-white/30 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-300"
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white/60 hover:text-white transition-colors"
-            >
-              {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-            </button>
-          </div>
+          {renderInput('email', 'email', 'Email Address', Mail)}
+          {renderInput('password', 'password', 'Password', Lock, true)}
         </div>
 
         {msg && (
-          <div className={`mt-4 p-3 rounded-xl flex items-center gap-2 ${
-            msg === 'Success!' ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'
-          }`}>
+          <div
+            className={`mt-4 p-3 rounded-xl flex items-center gap-2 ${
+              msg === 'Success!' ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'
+            }`}
+          >
             {msg === 'Success!' ? <CheckCircle className="w-5 h-5" /> : <AlertCircle className="w-5 h-5" />}
             <span className="text-sm">{msg}</span>
           </div>

@@ -262,8 +262,8 @@ export default function Navbar() {
                         </div>
                         
                         {[
-                          { href: '/auth/society/login', label: 'Login', icon: '🔐' },
-                          { href: '/auth/society/register', label: 'Register', icon: '🚀' }
+                          { href: '/society/login', label: 'Login', icon: '🔐' },
+                          { href: '/society/login', label: 'Register', icon: '🚀' }
                         ].map((item, index) => (
                           <Link
                             key={item.href}
@@ -372,8 +372,8 @@ export default function Navbar() {
                 </div>
                 
                 {[
-                  { href: '/auth/society/login', label: 'Society Login', icon: '🔐' },
-                  { href: '/auth/society/register', label: 'Society Register', icon: '🚀' }
+                  { href: '/society/login', label: 'Society Login', icon: '🔐' },
+                  { href: '/society/login', label: 'Society Register', icon: '🚀' }
                 ].map((item, index) => (
                   <Link
                     key={item.href}
