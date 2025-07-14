@@ -1,7 +1,7 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-
+import Chatbot from '@/components/Chatbot'; 
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -17,7 +17,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <main className="min-h-screen bg-gradient-to-br from-white via-blue-50 to-purple-50">
           {children}
         </main>
-        
+        <Chatbot />
       </body>
     </html>
   );

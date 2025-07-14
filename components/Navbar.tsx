@@ -45,6 +45,11 @@ export default function Navbar() {
   const navLinks = [
     { href: '/', label: 'Home' },
     { href: '/events', label: 'Events' },
+    {
+    href: 'https://trend-wise-flax.vercel.app/',
+    label: 'Newsletter',
+    external: true, // 👈 Add this flag to open in new tab
+  },
   ];
 
   const themeClasses = {
