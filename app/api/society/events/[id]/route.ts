@@ -2,13 +2,13 @@ import { NextRequest, NextResponse } from 'next/server';
 import { connectDB } from '@/lib/mongoose';
 import { Event } from '@/models/Event';
 
-// ✅ Correct type for context.params
 export async function PUT(
   req: NextRequest,
-  context: { params: Record<string, string> }
+  { params }: { params: { id: string } }
 ) {
   await connectDB();
-  const { id } = context.params;
+
+  const { id } = params;
   const { title, description, date, venue, imageUrl } = await req.json();
 
   const updated = await Event.findByIdAndUpdate(
@@ -26,12 +26,13 @@ export async function PUT(
 
 export async function DELETE(
   req: NextRequest,
-  context: { params: Record<string, string> }
+  { params }: { params: { id: string } }
 ) {
   await connectDB();
-  const { id } = context.params;
 
+  const { id } = params;
   const deleted = await Event.findByIdAndDelete(id);
+
   if (!deleted) {
     return NextResponse.json({ error: 'Event not found' }, { status: 404 });
   }
